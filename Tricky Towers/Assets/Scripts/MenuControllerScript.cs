@@ -15,6 +15,7 @@ public class MenuControllerScript : MonoBehaviour
         _menuScreen.SetActive(false);
         _gameScreen.SetActive(true);
         _pausePanel.SetActive(false);
+        FindObjectOfType<SpawnerScript>().RestartGame();
     }
 
     public void PauseGame()

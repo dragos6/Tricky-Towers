@@ -28,11 +28,12 @@ public class TetrisObject : MonoBehaviour
             gameObject.tag = "TowerBrick";
             listOfChildrenObjects = gameObject.GetComponentsInChildren<Transform>();
             foreach (var obj in listOfChildrenObjects)
-             {
-                 obj.tag = "TowerBrick";
+            {
+                obj.tag = "TowerBrick";
             }
             isCollided = false;
             FindObjectOfType<SpawnerScript>().SpawnNextPiece();
+           // FindObjectOfType<SpawnerScript>().nextRound++;
             enabled = false;
         }
         if (isDeathwall)
@@ -53,11 +54,11 @@ public class TetrisObject : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Q) && !isHardFalling)
         {
-            transform.Rotate(new Vector3(0, 0, -90));
+            transform.Rotate(new Vector3(0, 0, 90));
         }
         else if (Input.GetKeyDown(KeyCode.E) && !isHardFalling)
         {
-            transform.Rotate(new Vector3(0, 0, 90));
+            transform.Rotate(new Vector3(0, 0, -90));
         }
         else if (Input.GetKeyDown(KeyCode.S) && !isHardFalling)
         {
@@ -66,31 +67,48 @@ public class TetrisObject : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
-            Destroy(gameObject);
-            gameObjects = GameObject.FindGameObjectsWithTag("TowerBrick");
-            foreach (var obj in gameObjects)
-            {
-                Destroy(obj);
-            }
-
-            FindObjectOfType<SpawnerScript>().RestartGame();
-            FindObjectOfType<SpawnerScript>().SpawnNextPiece();
+            RestartGame();
         }
-        else if (Input.GetKeyDown(KeyCode.T))
+        else if(FindObjectOfType<SpawnerScript>().petrifySpell != 0)
         {
-            towerBricks = GameObject.FindGameObjectsWithTag("TowerBrick");
-            foreach (var obj in towerBricks)
+            if (Input.GetKeyDown(KeyCode.G))
             {
-                obj.GetComponentInParent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
-                SpriteRenderer[] sprites = obj.GetComponentsInChildren<SpriteRenderer>();
-                foreach (SpriteRenderer sprite in sprites)
+                towerBricks = GameObject.FindGameObjectsWithTag("TowerBrick");
+                foreach (var obj in towerBricks)
                 {
-                    sprite.sprite = stoneBrick;
+                    obj.GetComponentInParent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+                    SpriteRenderer[] sprites = obj.GetComponentsInChildren<SpriteRenderer>();
+                    foreach (SpriteRenderer sprite in sprites)
+                    {
+                        sprite.sprite = stoneBrick;
+                    }
                 }
-
+                FindObjectOfType<SpawnerScript>().petrifySpell--;
             }
-
         }
+        else if(FindObjectOfType<SpawnerScript>().zapSpell !=0)
+        {
+            if(Input.GetKeyDown(KeyCode.F))
+            {
+                FindObjectOfType<SpawnerScript>().zapSpell--;
+                FindObjectOfType<SpawnerScript>().SpawnNextPiece();
+                Destroy(gameObject);
+                
+            }
+        }
+    }
+
+    public void RestartGame()
+    {
+        Destroy(gameObject);
+        gameObjects = GameObject.FindGameObjectsWithTag("TowerBrick");
+        foreach (var obj in gameObjects)
+        {
+            Destroy(obj);
+        }
+
+        FindObjectOfType<SpawnerScript>().RestartGame();
+        FindObjectOfType<SpawnerScript>().SpawnNextPiece();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
