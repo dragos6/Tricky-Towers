@@ -70,6 +70,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 352c0284ec5b9124580d1cf1c822a6be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameObjects: []
+  towerBricks: []
+  stoneBrick: {fileID: 21300000, guid: 2df272f626083274faeb28313004e0a0, type: 3}
 --- !u!1 &1941677781108530924
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,7 +146,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: d6795a37e137b294ea278b7dfeafcb86, type: 3}
   m_Color: {r: 0.9803922, g: 0.96470594, b: 0.31764707, a: 1}
   m_FlipX: 0
@@ -254,7 +257,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: d6795a37e137b294ea278b7dfeafcb86, type: 3}
   m_Color: {r: 0.9811321, g: 0.96592605, b: 0.31933072, a: 1}
   m_FlipX: 0
@@ -365,7 +368,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: d6795a37e137b294ea278b7dfeafcb86, type: 3}
   m_Color: {r: 0.9803922, g: 0.96470594, b: 0.31764707, a: 1}
   m_FlipX: 0
@@ -476,7 +479,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: d6795a37e137b294ea278b7dfeafcb86, type: 3}
   m_Color: {r: 0.9803922, g: 0.96470594, b: 0.31764707, a: 1}
   m_FlipX: 0

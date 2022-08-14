@@ -7,13 +7,14 @@ public class MenuControllerScript : MonoBehaviour
     [SerializeField] private GameObject _menuScreen;
     [SerializeField] private GameObject _gameScreen;
     [SerializeField] private GameObject _pausePanel;
-
+    [SerializeField] private GameObject[] _sceneGameObjects;
+    [SerializeField] private GameObject _sceneFallingPiece;
+  
     public void PlayGame()
     {
         _menuScreen.SetActive(false);
         _gameScreen.SetActive(true);
         _pausePanel.SetActive(false);
-        Debug.Log("Play game pressed");
     }
 
     public void PauseGame()
@@ -31,7 +32,21 @@ public class MenuControllerScript : MonoBehaviour
     public void QuitToMainMenu()
     {
         Time.timeScale = 1f;
+        _sceneFallingPiece = GameObject.FindGameObjectWithTag("Tetromino");
+        Destroy(_sceneFallingPiece);
+        _sceneGameObjects = GameObject.FindGameObjectsWithTag("TowerBrick");
+        
+        foreach (var obj in _sceneGameObjects)
+        {
+            Destroy(obj);
+        }
+       // _sceneGameObjects = GameObject.FindGameObjectsWithTag("TowerBricks");
+        /*foreach (var obj in _sceneGameObjects)
+        {
+            Destroy(obj);
+        }*/
         _menuScreen.SetActive(true);
         _gameScreen.SetActive(false);
+
     }
 }

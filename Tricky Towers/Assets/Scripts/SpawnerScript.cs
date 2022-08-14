@@ -1,35 +1,63 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class SpawnerScript : MonoBehaviour
 {
+
     [SerializeField] private GameObject[] tetrisObjects;
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private List<GameObject> tetrisObjects1;
+    [SerializeField] public List<GameObject> listOfRandomPieces;
+    [SerializeField] private int numberOfMoves = 46;
+    [SerializeField] int nextPieceIndex;
+    [SerializeField] private TMP_Text scoreboard;
+    [SerializeField] private TMP_Text movesLeft;
+    [SerializeField] public int score;
+    int move= 0;
+
+    private void OnEnable()
     {
-        //int index = Random.Range(0, tetrisObjects.Length);
-        //Instantiate(tetrisObjects[index], transform.position, Quaternion.identity);
-        SpawnRandom();
-        //StartCoroutine(StartSpawning());
+        listOfRandomPieces = GetRandomElements(tetrisObjects1, numberOfMoves);
+        movesLeft.text = listOfRandomPieces.Count.ToString();
+        //SpawnRandom();
+        SpawnNextPiece();
+
     }
 
+    private void Update()
+    {
+        scoreboard.text = score.ToString();
+    }
+
+    public void RestartGame()
+    {
+        listOfRandomPieces = GetRandomElements(tetrisObjects1, numberOfMoves);
+        score = 0;
+        move = 0;
+        movesLeft.text = listOfRandomPieces.Count.ToString();
+    }
+    public void SpawnNextPiece()
+    {
+        nextPieceIndex = move + 1;
+        Instantiate(listOfRandomPieces[move], transform.position, Quaternion.identity);
+        move++;
+        movesLeft.text = (listOfRandomPieces.Count - move).ToString();
+    }
     public void SpawnRandom()
     {
         int index = Random.Range(0, tetrisObjects.Length);
         Instantiate(tetrisObjects[index], transform.position, Quaternion.identity);
     }
 
-    public void returningCall()
+    List<T> GetRandomElements<T>(List<T> inputList, int count)
     {
-        Debug.Log(1);
+        List<T> outputList = new List<T>();
+        for (int i = 0; i < count; i++)
+        {
+            int index = Random.Range(0, inputList.Count);
+            outputList.Add(inputList[index]);
+        }
+        return outputList;
     }
- /*   IEnumerator StartSpawning()
-    {
-        yield return new WaitForSeconds(3f);
-        int index = Random.Range(0, tetrisObjects.Length);
-        Instantiate(tetrisObjects[index], transform.position, Quaternion.identity);
-        StartCoroutine(StartSpawning());
-
-    }*/
 }
