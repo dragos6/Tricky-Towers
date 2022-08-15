@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5383838893190901641
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5383838893190901646}
+  - component: {fileID: 5383838893190901647}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5383838893190901646
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5383838893190901641}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 547.1998, z: -120.99951}
+  m_LocalScale: {x: 36, y: 36, z: 36}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5383838893190901647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5383838893190901641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a74caad63c4efb34599892102e6d9c76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _NextPieceList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _tetrisObjects:
+  - {fileID: 1219968058753393037, guid: df69ff69f2d547942969737274b6c53f, type: 3}
+  - {fileID: 3837792033984731147, guid: 0d75a2e749888f54a9d134d04c38074b, type: 3}
+  - {fileID: 8202618068026123746, guid: 088f48c2b2d8eb24cb6d865c44bcdaa1, type: 3}
+  - {fileID: 597176346947258700, guid: 492cd5ddaa0f4cc43a84c10728318b47, type: 3}
+  - {fileID: 2628134539507638956, guid: bd17be1da75388349a4d27ace5753efa, type: 3}
+  - {fileID: 3989265347668592611, guid: 7f305090dd5a538499113ea16cd16ba2, type: 3}
+  - {fileID: 1786441130128690374, guid: 88af40a275aa044438d388716d9e4f9e, type: 3}
+  _numberOfMoves: 25
+  _nextPieceIndex: 1
+  _petrifyCounter: {fileID: 0}
+  _zapCounter: {fileID: 0}
+  _scoreCounter: {fileID: 0}
+  _movesLeft: {fileID: 0}
+  listOfRandomPieces: []
+  score: 0
+  nextRound: 0
+  petrifySpell: 0
+  zapSpell: 0
+  grantPetrifySpell: 0
+  grantZapSpell: 0
+  gameStarting: 0
