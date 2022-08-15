@@ -103,7 +103,6 @@ public class TetrisObject : MonoBehaviour
         if (collision != null && collision.gameObject.tag != "Deathwall")
         {
             _isCollided = true;
-            _isHardFalling = false;
         }
         else if (collision.gameObject.tag == "Deathwall")
         {
