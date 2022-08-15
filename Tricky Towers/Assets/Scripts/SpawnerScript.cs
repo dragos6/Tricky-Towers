@@ -1,41 +1,43 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class SpawnerScript : MonoBehaviour
 {
+    #region Private Variables
+    [SerializeField] GameObject[] _NextPieceList;                       // Stores All Tetromino Full Sprites From GameScene panel named "NextPieceList" in Hierarchy ; Count:7
+    [SerializeField] private List<GameObject> _tetrisObjects;           // Stores All Tetromino Prefabs ; Count:7
+
+    private int _move = 0;
+    [SerializeField] private int _numberOfMoves = 25;
+    [SerializeField] int _nextPieceIndex = 1;
+
+
+    [SerializeField] private TMP_Text _petrifyCounter;                  // Needs reference from scene
+    [SerializeField] private TMP_Text _zapCounter;                      // Needs reference from scene
+    [SerializeField] private TMP_Text _scoreCounter;                    // Needs reference from scene
+    [SerializeField] private TMP_Text _movesLeft;                       // Needs reference from scene
+    #endregion
+
+    #region Public Variables
+    [SerializeField] public List<GameObject> listOfRandomPieces;        // Will contain a randomised list of every Tetromino during a game  
+    public int score;
+    public int nextRound = 0;
     public int petrifySpell = 0;
     public int zapSpell = 0;
+
     public bool grantPetrifySpell = false;
     public bool grantZapSpell = false;
-    [SerializeField] private int numberOfMoves = 46;
-    [SerializeField] int nextPieceIndex = 1;
-    [SerializeField] public int nextRound = 0;
-    [SerializeField] Vector3 originPos = new Vector3(-4000, 0, 0);
-    [SerializeField] Vector3 labelPos = new Vector3(0, 0, 0);
-    [SerializeField] private TMP_Text petrifyText;
-    [SerializeField] private TMP_Text zapText;
-    [SerializeField] private TMP_Text scoreboard;
-    [SerializeField] private TMP_Text movesLeft;
-    [SerializeField] public int score;
-    //[SerializeField] TMP_Text panel;
-    [SerializeField] public List<GameObject> listOfRandomPieces;
-    [SerializeField] GameObject[] NextPiece;
-    [SerializeField] private GameObject[] tetrisObjects;
-    [SerializeField] private List<GameObject> tetrisObjects1;
-    int move = 0;
+    public bool gameStarting = true;
+    #endregion
 
-    private void Start()
+    #region MonoBehaviour
+    private void OnEnable()                                             // TODO bugfix spawn random piece at the start of the game while using OnEnable
     {
-       
-    }
-    private void OnEnable()
-    {
-
-        listOfRandomPieces = GetRandomElements(tetrisObjects1, numberOfMoves);
-        movesLeft.text = listOfRandomPieces.Count.ToString();
+        RestartGame();
         SpawnNextPiece();
+        ClearNextPieces();
+        
     }
 
     private void Update()
@@ -44,26 +46,29 @@ public class SpawnerScript : MonoBehaviour
         {
             grantZapSpell = true;
         }
-     
-        if (score % 10 == 0 && score != 0)
+
+        if (score % 3 == 0 && score != 0)
         {
             grantPetrifySpell = true;
         }
-        Debug.Log($"nextmove:{nextPieceIndex} ; move:{move}");
-        scoreboard.text = score.ToString();
-        petrifyText.text = petrifySpell.ToString();
-        zapText.text = zapSpell.ToString();
-        
-    }
 
+        _scoreCounter.text = score.ToString();
+        _petrifyCounter.text = petrifySpell.ToString();
+        _zapCounter.text = zapSpell.ToString();
+    }
+    #endregion
+
+    #region Public Methods
     public void RestartGame()
     {
-        listOfRandomPieces = GetRandomElements(tetrisObjects1, numberOfMoves);
+        listOfRandomPieces = GetRandomElements(_tetrisObjects, _numberOfMoves);
         score = 0;
-        move = 0;
+        _move = 0;
         petrifySpell = 0;
         zapSpell = 0;
-        movesLeft.text = listOfRandomPieces.Count.ToString();
+        _nextPieceIndex = 1;
+       // ShowNextPiece();
+        _movesLeft.text = listOfRandomPieces.Count.ToString();
     }
     public void SpawnNextPiece()
     {
@@ -77,33 +82,50 @@ public class SpawnerScript : MonoBehaviour
             zapSpell++;
             grantZapSpell = false;
         }
-        if (move < listOfRandomPieces.Count)
 
+        if (_move < listOfRandomPieces.Count)
         {
-            foreach (var item in NextPiece)
+
+            if (_nextPieceIndex != _numberOfMoves)
             {
-                item.SetActive(false);
-                if (item.name == listOfRandomPieces[nextPieceIndex].name)
-                {
-                    item.SetActive(true);
-                }
+                ShowNextPiece();
             }
-            Instantiate(listOfRandomPieces[move], transform.position, Quaternion.identity);
-            move++;
-            nextPieceIndex = move + 1;
-            movesLeft.text = (listOfRandomPieces.Count - move).ToString();
-          
+
+            Instantiate(listOfRandomPieces[_move], transform.position, Quaternion.identity);
+            _move++;
+            _nextPieceIndex = _move + 1;
+            _movesLeft.text = (listOfRandomPieces.Count - _move).ToString();
+
         }
-        else Debug.Log("Finished");
-
-
+        else
+        {
+            FindObjectOfType<TetrisObject>().RestartGame();
+            Debug.Log("Finished"); // TODO save highscore
+        }
     }
-    public void SpawnRandom()
+
+    private void ClearNextPieces()
     {
-        int index = Random.Range(0, tetrisObjects.Length);
-        Instantiate(tetrisObjects[index], transform.position, Quaternion.identity);
-    }
+        foreach (var piece in _NextPieceList)
+        {
+            piece.SetActive(false);
+        }
 
+    }
+    private void ShowNextPiece()
+    {
+        foreach (var item in _NextPieceList)
+        {
+            item.SetActive(false);
+            if (item.name == listOfRandomPieces[_nextPieceIndex].name)
+            {
+                item.SetActive(true);
+            }
+        }
+    }
+    #endregion
+
+    #region Private Methods
     List<T> GetRandomElements<T>(List<T> inputList, int count)
     {
         List<T> outputList = new List<T>();
@@ -114,4 +136,6 @@ public class SpawnerScript : MonoBehaviour
         }
         return outputList;
     }
+    #endregion
+
 }

@@ -4,39 +4,39 @@ using UnityEngine;
 using TMPro;
 public class TetrisObject : MonoBehaviour
 {
-    bool isCollided = false;
-    bool isDeathwall = false;
-    bool isHardFalling = false;
-    SpawnerScript spawner;
-    public GameObject[] gameObjects;
-    public GameObject[] towerBricks;
-    [SerializeField] private Sprite stoneBrick;
-    public Transform[] listOfChildrenObjects;
-    Rigidbody2D rb;
+    #region Private Variables
+    private bool _isCollided = false;
+    private bool _isDeathwall = false;
+    private GameObject[] _gameObjects;
+    private GameObject[] _towerBricks;
+    [SerializeField] private Sprite _stoneBrick;
+    private Transform[] _listOfChildrenObjects;
+    private Rigidbody2D _rb;
+    #endregion
 
+    #region MonoBehaviour
     private void Start()
     {
-
-        rb = GetComponent<Rigidbody2D>();
+        _rb = GetComponent<Rigidbody2D>();
     }
+
     void Update()
     {
-        // FindObjectOfType<TMP_Text>().text = score.ToString();
-        if (isCollided)
+        if (_isCollided)
         {
             FindObjectOfType<SpawnerScript>().score++;
             gameObject.tag = "TowerBrick";
-            listOfChildrenObjects = gameObject.GetComponentsInChildren<Transform>();
-            foreach (var obj in listOfChildrenObjects)
+            _listOfChildrenObjects = gameObject.GetComponentsInChildren<Transform>();
+            foreach (var obj in _listOfChildrenObjects)
             {
                 obj.tag = "TowerBrick";
             }
-            isCollided = false;
+            _isCollided = false;
             FindObjectOfType<SpawnerScript>().SpawnNextPiece();
-           // FindObjectOfType<SpawnerScript>().nextRound++;
             enabled = false;
         }
-        if (isDeathwall)
+
+        if (_isDeathwall)
         {
             FindObjectOfType<SpawnerScript>().score--;
 
@@ -44,65 +44,80 @@ public class TetrisObject : MonoBehaviour
 
             Destroy(this.gameObject);
         }
+
         if (Input.GetKeyDown(KeyCode.A))
         {
             transform.position += new Vector3(-0.5f, 0, 0);
         }
+
         else if (Input.GetKeyDown(KeyCode.D))
         {
             transform.position += new Vector3(0.5f, 0, 0);
         }
-        else if (Input.GetKeyDown(KeyCode.Q) && !isHardFalling)
+
+        else if (Input.GetKeyDown(KeyCode.Q))
         {
             transform.Rotate(new Vector3(0, 0, 90));
         }
-        else if (Input.GetKeyDown(KeyCode.E) && !isHardFalling)
+
+        else if (Input.GetKeyDown(KeyCode.E))
         {
             transform.Rotate(new Vector3(0, 0, -90));
-        }
-        else if (Input.GetKeyDown(KeyCode.S) && !isHardFalling)
-        {
-            rb.gravityScale = rb.gravityScale * 8;
-            isHardFalling = true;
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
             RestartGame();
         }
-        else if(FindObjectOfType<SpawnerScript>().petrifySpell != 0)
+
+        else if (FindObjectOfType<SpawnerScript>().petrifySpell != 0)                                               // Turns fallen bricks into immovable objects
         {
             if (Input.GetKeyDown(KeyCode.G))
             {
-                towerBricks = GameObject.FindGameObjectsWithTag("TowerBrick");
-                foreach (var obj in towerBricks)
+                _towerBricks = GameObject.FindGameObjectsWithTag("TowerBrick");
+                foreach (var obj in _towerBricks)
                 {
                     obj.GetComponentInParent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
                     SpriteRenderer[] sprites = obj.GetComponentsInChildren<SpriteRenderer>();
                     foreach (SpriteRenderer sprite in sprites)
                     {
-                        sprite.sprite = stoneBrick;
+                        sprite.sprite = _stoneBrick;
                     }
                 }
                 FindObjectOfType<SpawnerScript>().petrifySpell--;
             }
         }
-        else if(FindObjectOfType<SpawnerScript>().zapSpell !=0)
+
+        else if (FindObjectOfType<SpawnerScript>().zapSpell != 0)                                                   // Delets falling piece
         {
-            if(Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.F))
             {
                 FindObjectOfType<SpawnerScript>().zapSpell--;
                 FindObjectOfType<SpawnerScript>().SpawnNextPiece();
                 Destroy(gameObject);
-                
+
             }
         }
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision != null && collision.gameObject.tag != "Deathwall")
+        {
+            _isCollided = true;
+            _isHardFalling = false;
+        }
+        else if (collision.gameObject.tag == "Deathwall")
+        {
+            _isDeathwall = true;
+        }
+    }
+    #endregion
 
+    #region Public Methods
     public void RestartGame()
     {
         Destroy(gameObject);
-        gameObjects = GameObject.FindGameObjectsWithTag("TowerBrick");
-        foreach (var obj in gameObjects)
+        _gameObjects = GameObject.FindGameObjectsWithTag("TowerBrick");
+        foreach (var obj in _gameObjects)
         {
             Destroy(obj);
         }
@@ -110,18 +125,5 @@ public class TetrisObject : MonoBehaviour
         FindObjectOfType<SpawnerScript>().RestartGame();
         FindObjectOfType<SpawnerScript>().SpawnNextPiece();
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision != null && collision.gameObject.tag != "Deathwall")
-        {
-            isCollided = true;
-            isHardFalling = false;
-        }
-        else if (collision.gameObject.tag == "Deathwall")
-        {
-            isDeathwall = true;
-        }
-    }
-
+    #endregion
 }
